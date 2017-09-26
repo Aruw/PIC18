@@ -42,8 +42,56 @@ void main (void){ 					//Rotina principal do programa
 	//Pinos em modo digital 
 	ADCON1 = 0b00000111;
 
-	LATD = 0X00;	//dISPLAYS INICIALMENTE APAGADOS	
+	LATD = 0X00;	//DISPLAYS INICIALMENTE APAGADOS	
 	LATB = 0x00; 	//Display inicialmente desabilitados
 
 	//Pinos de habilitação configurados como saida
 	TRISB = 0b00001111;	
+	
+	TRISD = 0x00;	//PORTD configurado como saída
+
+	//Obtém os 4 algarismos a serem exibidos.
+
+	unidade = numero % 10;	//Resto da divisão por 10.
+	numero /= 10;
+	dezena = numero % 10;
+	numero /= 10;
+	centena = numero %10;
+	milhar = numero /10;
+
+	while{			//Laço principal
+		LATD = 0x00;	//Apaga o display selecionado.
+		LATB = 0x00; 	//Divisão inteira por 10.
+
+		//Define o valor enviado para o display
+		//Conforme o display selecionado.
+
+		switch(display){
+			case 0b00010000:
+				LATD = vetor[unidade];
+				break;
+			case 0b00100000:
+				LATD = vetor[dezena];
+				break;
+			case 0b01000000:
+				LATD = vetor[centena];
+				break;
+			case 0b10000000:
+				LATD = vetor[milhar];
+				break;
+		}
+
+	//Envia o código de seleção para o PORTB.
+	LATB = display;
+
+	display <<= 1;		//Seleciona o próximo display
+	
+	//Se já selecionou o último, seleciona o primeiro 
+	if(display == 0){
+		display = 0b00010000;
+	}
+
+	//Atraso de 1ms.
+	Delay1KTCYx(1);
+	}
+}
