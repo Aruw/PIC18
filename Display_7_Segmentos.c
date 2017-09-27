@@ -1,5 +1,5 @@
 /*
-	Experiência com varredura dos displays de 7
+	ExperiÃªncia com varredura dos displays de 7
 	segmentos na placa McLab2 com o PIC18F452.
 	Compilador utilizado: C18.
 	Autor: Prof. Giovanni Rizzo Junior.
@@ -13,30 +13,30 @@
 #pragma config WDT = OFF			//Watchdog-Time desabilitado.
 #pragma config LVP = OFF			//Modo LVP desligado, para utilizar o pino RB5.
 
-//VETOR de correspondencia entre algarismos decimais e código para display de 7 segmentos.
+//VETOR de correspondencia entre algarismos decimais e cÃ³digo para display de 7 segmentos.
 
 const rom char vetor[]={
-	0b00111111,						//Dígito 0
-	0b00000110,						//Dígito 1
-	0b01011011,						//Dígito 2
-	0b01001111,						//Dígito 3
-	0b01100110,						//Dígito 4
-	0b01101101,						//Dígito 5
-	0b01111101,						//Dígito 6
-	0b00000111,						//Dígito 7
-	0b01111111,						//Dígito 8
-	0b01100111,						//Dígito 9
+	0b00111111,						//DÃ­gito 0
+	0b00000110,						//DÃ­gito 1
+	0b01011011,						//DÃ­gito 2
+	0b01001111,						//DÃ­gito 3
+	0b01100110,						//DÃ­gito 4
+	0b01101101,						//DÃ­gito 5
+	0b01111101,						//DÃ­gito 6
+	0b00000111,						//DÃ­gito 7
+	0b01111111,						//DÃ­gito 8
+	0b01100111,						//DÃ­gito 9
 };
 
 void main (void){ 					//Rotina principal do programa 
 	
-	//variavel para seleção do display
+	//variavel para seleÃ§Ã£o do display
 	char display = 0b00010000;
 	
 	//Variaveis com os digitos decimais 
 	char unidade, dezena, centena, milhar;
 
-	//Número de 4 algarismos a ser exibido 
+	//NÃºmero de 4 algarismos a ser exibido 
 	int numero = 2017;
 
 	//Pinos em modo digital 
@@ -45,23 +45,23 @@ void main (void){ 					//Rotina principal do programa
 	LATD = 0X00;	//DISPLAYS INICIALMENTE APAGADOS	
 	LATB = 0x00; 	//Display inicialmente desabilitados
 
-	//Pinos de habilitação configurados como saida
+	//Pinos de habilitaÃ§Ã£o configurados como saida
 	TRISB = 0b00001111;	
 	
-	TRISD = 0x00;	//PORTD configurado como saída
+	TRISD = 0x00;	//PORTD configurado como saÃ­da
 
-	//Obtém os 4 algarismos a serem exibidos.
+	//ObtÃ©m os 4 algarismos a serem exibidos.
 
-	unidade = numero % 10;	//Resto da divisão por 10.
+	unidade = numero % 10;	//Resto da divisÃ£o por 10.
 	numero /= 10;
 	dezena = numero % 10;
 	numero /= 10;
 	centena = numero %10;
 	milhar = numero /10;
 
-	while{			//Laço principal
+	while(1){		//LaÃ§o principal
 		LATD = 0x00;	//Apaga o display selecionado.
-		LATB = 0x00; 	//Divisão inteira por 10.
+		LATB = 0x00; 	//DivisÃ£o inteira por 10.
 
 		//Define o valor enviado para o display
 		//Conforme o display selecionado.
@@ -81,17 +81,17 @@ void main (void){ 					//Rotina principal do programa
 				break;
 		}
 
-	//Envia o código de seleção para o PORTB.
+	//Envia o cÃ³digo de seleÃ§Ã£o para o PORTB.
 	LATB = display;
 
-	display <<= 1;		//Seleciona o próximo display
+	display <<= 1;		//Seleciona o prÃ³ximo display
 	
-	//Se já selecionou o último, seleciona o primeiro 
+	//Se jÃ¡ selecionou o Ãºltimo, seleciona o primeiro 
 	if(display == 0){
 		display = 0b00010000;
 	}
 
 	//Atraso de 1ms.
 	Delay1KTCYx(1);
-	}
+	
 }
